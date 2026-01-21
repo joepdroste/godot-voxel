@@ -1,10 +1,38 @@
-[gd_scene load_steps=3 format=3 uid="uid://clchfohrgq5hx"]
+[gd_scene load_steps=6 format=3 uid="uid://clchfohrgq5hx"]
 
-[ext_resource type="Script" uid="uid://dx4wlol5oyu2d" path="res://scripts/world.gd" id="1_tlwt5"]
-[ext_resource type="Texture2D" uid="uid://c1skks1ksrgi1" path="res://assets/cube_test.png" id="2_fj7yv"]
+[ext_resource type="Script" uid="uid://dx4wlol5oyu2d" path="res://scripts/world.gd" id="1_world"]
+[ext_resource type="Texture2D" uid="uid://c1skks1ksrgi1" path="res://assets/cube_test.png" id="2_atlas"]
+[ext_resource type="Script" uid="uid://d2ef2hgjnh515" path="res://scripts/player.gd" id="3_player"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="Environment" id="Environment_sky"]
+background_mode = 1
+background_color = Color(0.53, 0.81, 0.92, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.5
 
 [node name="World" type="Node3D"]
-script = ExtResource("1_tlwt5")
-atlas_texture = ExtResource("2_fj7yv")
+script = ExtResource("1_world")
+render_distance = 6
+atlas_texture = ExtResource("2_atlas")
 
-[node name="Chunks" type="Node3D" parent="."]
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 120, 0)
+script = ExtResource("3_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 50, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_sky")
